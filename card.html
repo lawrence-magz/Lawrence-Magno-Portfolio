@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>QR Card | Lawrence B. Magno</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Figtree:wght@400;500;700&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    :root { --ink:#161d2b; --slate:#2f4f65; --teal:#5f96a8; --mist:#d3ebe4; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: "Figtree", sans-serif; background: #e9efee; display: grid; place-items: center; min-height: 100vh; gap: 20px; padding: 30px; }
+    .sheet { display: flex; flex-wrap: wrap; gap: 24px; justify-content: center; }
+
+    /* Standard business card ratio 3.5in x 2in, scaled for screen */
+    .card { width: 700px; height: 400px; display: flex; overflow: hidden; border-radius: 14px; box-shadow: 0 14px 40px rgba(22,29,43,.25); }
+    .info { flex: 1; display: flex; flex-direction: column; }
+    .info > div { padding: 0 34px; display: flex; flex-direction: column; justify-content: center; }
+    .b1 { background: var(--ink); color: var(--mist); flex: 5; }
+    .b2 { background: var(--slate); color: var(--mist); flex: 2; }
+    .b3 { background: var(--teal); color: var(--ink); flex: 3; font-size: 15px; font-weight: 500; line-height: 1.5; }
+    h1 { font-family: "Bricolage Grotesque", sans-serif; font-size: 40px; line-height: 1; }
+    .role { color: var(--teal); letter-spacing: 3px; text-transform: uppercase; font-size: 12px; margin-top: 12px; }
+    .b2 { font-size: 15px; }
+    .qr { width: 230px; background: var(--mist); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; color: var(--ink); }
+    #qrcode { background: #fff; padding: 10px; border-radius: 10px; }
+    .qr small { font-weight: 700; letter-spacing: 2px; font-size: 11px; text-transform: uppercase; }
+
+    /* back of card */
+    .back { background: var(--ink); color: var(--mist); flex-direction: column; justify-content: center; align-items: center; text-align: center; gap: 14px; }
+    .back .stripe { display: flex; width: 220px; height: 10px; border-radius: 5px; overflow: hidden; }
+    .back .stripe i { flex: 1; }
+    .back h2 { font-family: "Bricolage Grotesque", sans-serif; font-size: 34px; }
+    .back p { color: var(--teal); letter-spacing: 3px; font-size: 12px; text-transform: uppercase; }
+
+    .controls { background: #fff; padding: 14px 18px; border-radius: 12px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+    .controls input { padding: 8px 12px; width: 340px; max-width: 100%; border: 2px solid var(--teal); border-radius: 8px; font: inherit; }
+    .controls button { padding: 8px 18px; border: 0; border-radius: 8px; background: var(--ink); color: var(--mist); font: inherit; font-weight: 700; cursor: pointer; }
+
+    @media print {
+      @page { size: landscape; margin: 10mm; }
+      body { background: #fff; padding: 0; }
+      .controls { display: none; }
+      .card { box-shadow: none; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="controls">
+    <label for="url"><b>Portfolio URL:</b></label>
+    <input id="url" value="https://your-portfolio.vercel.app" />
+    <button id="make">Update QR</button>
+    <button onclick="window.print()">Print / Save PDF</button>
+  </div>
+
+  <div class="sheet">
+    <!-- FRONT -->
+    <div class="card">
+      <div class="info">
+        <div class="b1">
+          <h1>Lawrence<br>B. Magno</h1>
+          <span class="role">BS Computer Engineering</span>
+        </div>
+        <div class="b2">Holy Cross of Davao College</div>
+        <div class="b3">
+          lawrencemagno719@gmail.com<br>
+          0961 226 6689<br>
+          Island Garden City of Samal, Davao del Norte
+        </div>
+      </div>
+      <div class="qr">
+        <div id="qrcode"></div>
+        <small>Scan my portfolio</small>
+      </div>
+    </div>
+
+    <!-- BACK -->
+    <div class="card back">
+      <div class="stripe"><i style="background:#161d2b;outline:1px solid #2f4f65"></i><i style="background:#2f4f65"></i><i style="background:#5f96a8"></i><i style="background:#d3ebe4"></i></div>
+      <h2>Lawrence B. Magno</h2>
+      <p>Portfolio &middot; LinkedIn &middot; GitHub</p>
+    </div>
+  </div>
+
+  <script>
+    const box = document.getElementById("qrcode");
+    function render() {
+      box.innerHTML = "";
+      new QRCode(box, {
+        text: document.getElementById("url").value.trim(),
+        width: 170, height: 170,
+        colorDark: "#161d2b", colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H
+      });
+    }
+    document.getElementById("make").onclick = render;
+    render();
+  </script>
+</body>
+</html>
